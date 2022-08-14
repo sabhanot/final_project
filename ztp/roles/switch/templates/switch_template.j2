@@ -1,0 +1,18 @@
+
+{% for interface in item.interfaces %}
+interface {{ interface.interface_id }}
+description {{ interface.description }}
+ip address {{ interface.address }} {{ interface.netmask }}
+ip ospf 1 area {{ interface.ospf_area_id }}
+no sh
+
+{% endfor %}
+
+{% for interface in item.access_interfaces %}
+interface {{ interface.interface_id }}
+switchport mode access
+switchport access {{ interface.vlan_id }}
+no sh
+
+{% endfor %}
+

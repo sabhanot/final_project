@@ -1,0 +1,9 @@
+---
+# tasks file for switch
+- name: generating config files for switches
+  template:
+    src: switch_template.j2
+    dest: /etc/ansible/CONFIGS/{{ item.hostname}}.txt
+  with_items: "{{ switches }}"
+
+
