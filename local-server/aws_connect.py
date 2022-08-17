@@ -32,14 +32,14 @@ print("Running ansible playbook to create configuration")
 stdin,stdout,stderr = client_1.exec_command("ansible-playbook /etc/ansible/final_project/ztp/site.yml")
 # time.sleep(10)
 print(stdout.read().decode("ascii"))
-intput,output,error = client_1.exec_command("ls /etc/ansible/CONFIGS")
+intput,output,error = client_1.exec_command("ls /etc/ansible/final_project/ztp/CONFIGS")
 # print(output.read().decode("ascii"))
 print("Below files created")
 for i in output.read().decode("ascii").split("\n"):
     if i == "":
         continue
     print(i)
-    path = f"/etc/ansible/CONFIGS/{i}"
+    path = f"/etc/ansible/final_project/ztp/CONFIGS/{i}"
     scp.get(path)
 print("Retriving the config files from the AWS server")
 devices = {"core-r1": "192.168.187.193","core-r2": "192.168.187.194","dist-sw1": "192.168.187.199","dist-sw2": "192.168.187.197"}
