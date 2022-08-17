@@ -30,6 +30,7 @@ no sh
 
 {% for interface in item.trunk_interface %}
 interface {{ interface }}
+switchport trunk encapsulation dot1q
 switchport mode trunk
 no sh
 
