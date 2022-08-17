@@ -1,12 +1,13 @@
 import sys
-
+import scp
 import netmiko
 from netmiko import ConnectHandler
 import json
 global final_ds
 import threading
 from os.path import exists
-
+import paramiko
+from scp import SCPClient
 
 def collect_log(ssh_conn):
     all_logs = ssh_conn.send_command("show log")
@@ -27,7 +28,7 @@ def device_collection(ssh_conn,site,host):
     cpu_detail,cpu = collect_cpu(ssh_conn)
     # device_ds = {host:{"log":[],"CPU":cpu,"CPU_details":cpu_detail}}
     final_ds[site][host] = {"log":log_list,"CPU":cpu,"CPU_details":cpu_detail}
-
+    print(f"{host} done")
 def final_output(collected_otp,stored_otp):
     if stored_otp == None:
         return collected_otp
@@ -53,7 +54,7 @@ def final_output(collected_otp,stored_otp):
 
 
 if __name__ == "__main__":
-    host_ip = sys.argv[1]
+    aws_ip = sys.argv[1]
 
     devices = {"core-r1": "192.168.187.193","core-r2": "192.168.187.194","dist-sw1": "192.168.187.199","dist-sw2": "192.168.187.197"}
     # {core-r1:{log:[],cpu:[]}
@@ -81,10 +82,6 @@ if __name__ == "__main__":
     print("pushing the logs to AWS-server")
     client_1 = paramiko.SSHClient()
     client_1.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-    client_1.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-    client_1.connect(hostname=host_ip, username="root", password="Final_project")
+    client_1.connect(hostname=aws_ip, username="root", password="Final_project")
     scp = SCPClient(client_1.get_transport())
-    scp.put("ouputs/monitor_logs.json", "/etc/ansible/final_project/AWS-server")
-    
-#
-
+    scp.put("outputs/monitor_logs.json", "/etc/ansible/final_project/AWS-server")
