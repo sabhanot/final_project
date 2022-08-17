@@ -233,9 +233,9 @@ if __name__ == "__main__":
     #         some_thread.join()
 
     # print(final_DS)
-    with open("/outputs/all_logs_site.json","w") as f:
+    with open("outputs/all_logs_site.json","w") as f:
         json.dump(final_DS,f,indent=4)
-    with open("/outputs/all_logs_site.yml","w") as f:
+    with open("outputs/all_logs_site.yml","w") as f:
         yaml.dump(final_DS,f)
     print('"all_logs_site.yml" yaml file created')
 
