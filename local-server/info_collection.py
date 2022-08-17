@@ -156,12 +156,19 @@ def get_svi(site):
 
 
 
-def switch_info(ssh_conn,site,access_interface,vlans_list):
+def switch_info(ssh_conn,site,access_interface,vlans_list,trunk_interface):
     # print("inside switch")
     hostname = get_hostname(ssh_conn)
     interface_list = get_interfaces_info(ssh_conn,site)
+    print(trunk_interface[hostname])
+    print(interface_list)
     for i in interface_list:
         i["ospf_area_id"] = "1"
+        if i["interface_id"] in trunk_interface[hostname]:
+            interface_list.remove(i)
+            break
+            pass
+    print(interface_list)
     svi_int_list = get_svi(site)
     # print(svi_int_list)
     # for i in svi_int_list:
@@ -174,11 +181,12 @@ def switch_info(ssh_conn,site,access_interface,vlans_list):
         temp_dict["vlan_id"] = val
         access_int_list.append(temp_dict)
 
-    result_ds = {"hostname": hostname,"interfaces":interface_list,"access_interfaces":access_int_list,"SVI_interfaces":svi_int_list}
+    result_ds = {"hostname": hostname,"interfaces":interface_list,"access_interfaces":access_int_list,"SVI_interfaces":svi_int_list,"trunk_interface":trunk_interface[hostname]}
+    # print(result_ds)
     print("switch done")
     final_DS["switches"].append(result_ds)
 
-def device_info(ssh,site,access_interface,vlans_list):
+def device_info(ssh,site,access_interface,vlans_list,trunk_interface):
     # all_info = {"site":site,"switches":[],"routers":[]}
 
     hostname = get_hostname(ssh_conn)
@@ -187,7 +195,7 @@ def device_info(ssh,site,access_interface,vlans_list):
     if which_device == "r":
         router_info(ssh_conn,site)
     elif which_device == "s":
-        switch_info(ssh,site,access_interface,vlans_list)
+        switch_info(ssh,site,access_interface,vlans_list,trunk_interface)
 
 
 
@@ -205,6 +213,7 @@ if __name__ == "__main__":
     switch_vlan = {}
     all_switch_subnet = list(IPNetwork(switch_vlan_subnet).subnet(28))
     access_interface = {"dist-sw1":{"Ethernet1/0":"vlan 10","Ethernet1/1":"vlan 20"},"dist-sw2":{"Ethernet2/0":"vlan 20","Ethernet2/1":"vlan 10","Ethernet2/2":"vlan 30"}}
+    trunk_interface = {"dist-sw1":["Ethernet0/3"],"dist-sw2":["Ethernet0/3"]}
     # # breaking interface_subnet into /30 subnets to assign it to interfaces
     all_interface_subnets = list(IPNetwork(interface_subnet).subnet(30))
     for i in range(len(switch_vlan_list)):
@@ -220,7 +229,7 @@ if __name__ == "__main__":
     for name,ip in devices.items():
         dev_conn = {'device_type': 'cisco_ios', 'ip': ip, 'username': "cisco", 'password': "cisco", 'verbose': False, 'secret' :"cisco" }
         ssh_conn = ConnectHandler(**dev_conn)
-        my_thread = threading.Thread(target=device_info, args=(ssh_conn, site, access_interface,switch_vlan_list))
+        my_thread = threading.Thread(target=device_info, args=(ssh_conn, site, access_interface,switch_vlan_list,trunk_interface))
         my_thread.start()
         threads.append(my_thread)
         # dev_ice,info_dict = device_info(ssh_conn,site,access_interface)
