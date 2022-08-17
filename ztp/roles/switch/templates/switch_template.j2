@@ -28,3 +28,10 @@ no sh
 
 {% endfor %}
 
+{% for interface in item.trunk_interface %}
+interface {{ interface }}
+switchport mode trunk
+no sh
+
+{% endfor %}
+
