@@ -1,0 +1,177 @@
+{
+    "site": "site-1",
+    "routers": [
+        {
+            "hostname": "core-r1",
+            "interfaces": [
+                {
+                    "interface_id": "Ethernet0/1",
+                    "description": "to-core-r2",
+                    "ospf_area_id": "0",
+                    "address": "192.168.1.1",
+                    "netmask": "255.255.255.252"
+                },
+                {
+                    "interface_id": "Ethernet0/2",
+                    "description": "to-dist-sw1",
+                    "ospf_area_id": "1",
+                    "address": "192.168.1.5",
+                    "netmask": "255.255.255.252"
+                },
+                {
+                    "interface_id": "Ethernet0/3",
+                    "description": "to-dist-sw2",
+                    "ospf_area_id": "1",
+                    "address": "192.168.1.9",
+                    "netmask": "255.255.255.252"
+                }
+            ]
+        },
+        {
+            "hostname": "core-r2",
+            "interfaces": [
+                {
+                    "interface_id": "Ethernet0/1",
+                    "description": "to-core-r1",
+                    "ospf_area_id": "0",
+                    "address": "192.168.1.2",
+                    "netmask": "255.255.255.252"
+                },
+                {
+                    "interface_id": "Ethernet0/2",
+                    "description": "to-dist-sw2",
+                    "ospf_area_id": "1",
+                    "address": "192.168.1.13",
+                    "netmask": "255.255.255.252"
+                },
+                {
+                    "interface_id": "Ethernet0/3",
+                    "description": "to-dist-sw1",
+                    "ospf_area_id": "1",
+                    "address": "192.168.1.17",
+                    "netmask": "255.255.255.252"
+                }
+            ]
+        }
+    ],
+    "switches": [
+        {
+            "hostname": "dist-sw1",
+            "interfaces": [
+                {
+                    "interface_id": "Ethernet0/1",
+                    "description": "to-core-r1",
+                    "ospf_area_id": "1",
+                    "address": "192.168.1.6",
+                    "netmask": "255.255.255.252"
+                },
+                {
+                    "interface_id": "Ethernet0/2",
+                    "description": "to-core-r2",
+                    "ospf_area_id": "1",
+                    "address": "192.168.1.18",
+                    "netmask": "255.255.255.252"
+                },
+                {
+                    "description": "virtual interface for vlan vlan 10",
+                    "interface_id": "vlan 10",
+                    "address": "192.168.1.254",
+                    "netmask": "255.255.255.240",
+                    "ospf_area_id": "1"
+                },
+                {
+                    "description": "virtual interface for vlan vlan 20",
+                    "interface_id": "vlan 20",
+                    "address": "192.168.1.238",
+                    "netmask": "255.255.255.240",
+                    "ospf_area_id": "1"
+                },
+                {
+                    "description": "virtual interface for vlan vlan 30",
+                    "interface_id": "vlan 30",
+                    "address": "192.168.1.222",
+                    "netmask": "255.255.255.240",
+                    "ospf_area_id": "1"
+                },
+                {
+                    "description": "virtual interface for vlan vlan 40",
+                    "interface_id": "vlan 40",
+                    "address": "192.168.1.206",
+                    "netmask": "255.255.255.240",
+                    "ospf_area_id": "1"
+                }
+            ],
+            "access_interfaces": [
+                {
+                    "interface_id": "Ethernet1/0",
+                    "vlan_id": "vlan 10"
+                },
+                {
+                    "interface_id": "Ethernet1/1",
+                    "vlan_id": "vlan 20"
+                }
+            ]
+        },
+        {
+            "hostname": "dist-sw2",
+            "interfaces": [
+                {
+                    "interface_id": "Ethernet0/1",
+                    "description": "to-core-r2",
+                    "ospf_area_id": "1",
+                    "address": "192.168.1.14",
+                    "netmask": "255.255.255.252"
+                },
+                {
+                    "interface_id": "Ethernet0/2",
+                    "description": "to-core-r1",
+                    "ospf_area_id": "1",
+                    "address": "192.168.1.10",
+                    "netmask": "255.255.255.252"
+                },
+                {
+                    "description": "virtual interface for vlan vlan 10",
+                    "interface_id": "vlan 10",
+                    "address": "192.168.1.253",
+                    "netmask": "255.255.255.240",
+                    "ospf_area_id": "1"
+                },
+                {
+                    "description": "virtual interface for vlan vlan 20",
+                    "interface_id": "vlan 20",
+                    "address": "192.168.1.237",
+                    "netmask": "255.255.255.240",
+                    "ospf_area_id": "1"
+                },
+                {
+                    "description": "virtual interface for vlan vlan 30",
+                    "interface_id": "vlan 30",
+                    "address": "192.168.1.221",
+                    "netmask": "255.255.255.240",
+                    "ospf_area_id": "1"
+                },
+                {
+                    "description": "virtual interface for vlan vlan 40",
+                    "interface_id": "vlan 40",
+                    "address": "192.168.1.205",
+                    "netmask": "255.255.255.240",
+                    "ospf_area_id": "1"
+                }
+            ],
+            "access_interfaces": [
+                {
+                    "interface_id": "Ethernet2/0",
+                    "vlan_id": "vlan 20"
+                },
+                {
+                    "interface_id": "Ethernet2/1",
+                    "vlan_id": "vlan 10"
+                },
+                {
+                    "interface_id": "Ethernet2/2",
+                    "vlan_id": "vlan 30"
+                }
+            ]
+        }
+    ]
+}

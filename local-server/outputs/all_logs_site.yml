@@ -1,0 +1,54 @@
+routers:
+- hostname: core-r1
+  interfaces:
+  - {address: 192.168.1.1, description: to-core-r2, interface_id: Ethernet0/1, netmask: 255.255.255.252,
+    ospf_area_id: '0'}
+  - {address: 192.168.1.5, description: to-dist-sw1, interface_id: Ethernet0/2, netmask: 255.255.255.252,
+    ospf_area_id: '1'}
+  - {address: 192.168.1.9, description: to-dist-sw2, interface_id: Ethernet0/3, netmask: 255.255.255.252,
+    ospf_area_id: '1'}
+- hostname: core-r2
+  interfaces:
+  - {address: 192.168.1.2, description: to-core-r1, interface_id: Ethernet0/1, netmask: 255.255.255.252,
+    ospf_area_id: '0'}
+  - {address: 192.168.1.13, description: to-dist-sw2, interface_id: Ethernet0/2, netmask: 255.255.255.252,
+    ospf_area_id: '1'}
+  - {address: 192.168.1.17, description: to-dist-sw1, interface_id: Ethernet0/3, netmask: 255.255.255.252,
+    ospf_area_id: '1'}
+site: site-1
+switches:
+- access_interfaces:
+  - {interface_id: Ethernet1/0, vlan_id: vlan 10}
+  - {interface_id: Ethernet1/1, vlan_id: vlan 20}
+  hostname: dist-sw1
+  interfaces:
+  - {address: 192.168.1.6, description: to-core-r1, interface_id: Ethernet0/1, netmask: 255.255.255.252,
+    ospf_area_id: '1'}
+  - {address: 192.168.1.18, description: to-core-r2, interface_id: Ethernet0/2, netmask: 255.255.255.252,
+    ospf_area_id: '1'}
+  - {address: 192.168.1.254, description: virtual interface for vlan vlan 10, interface_id: vlan
+      10, netmask: 255.255.255.240, ospf_area_id: '1'}
+  - {address: 192.168.1.238, description: virtual interface for vlan vlan 20, interface_id: vlan
+      20, netmask: 255.255.255.240, ospf_area_id: '1'}
+  - {address: 192.168.1.222, description: virtual interface for vlan vlan 30, interface_id: vlan
+      30, netmask: 255.255.255.240, ospf_area_id: '1'}
+  - {address: 192.168.1.206, description: virtual interface for vlan vlan 40, interface_id: vlan
+      40, netmask: 255.255.255.240, ospf_area_id: '1'}
+- access_interfaces:
+  - {interface_id: Ethernet2/0, vlan_id: vlan 20}
+  - {interface_id: Ethernet2/1, vlan_id: vlan 10}
+  - {interface_id: Ethernet2/2, vlan_id: vlan 30}
+  hostname: dist-sw2
+  interfaces:
+  - {address: 192.168.1.14, description: to-core-r2, interface_id: Ethernet0/1, netmask: 255.255.255.252,
+    ospf_area_id: '1'}
+  - {address: 192.168.1.10, description: to-core-r1, interface_id: Ethernet0/2, netmask: 255.255.255.252,
+    ospf_area_id: '1'}
+  - {address: 192.168.1.253, description: virtual interface for vlan vlan 10, interface_id: vlan
+      10, netmask: 255.255.255.240, ospf_area_id: '1'}
+  - {address: 192.168.1.237, description: virtual interface for vlan vlan 20, interface_id: vlan
+      20, netmask: 255.255.255.240, ospf_area_id: '1'}
+  - {address: 192.168.1.221, description: virtual interface for vlan vlan 30, interface_id: vlan
+      30, netmask: 255.255.255.240, ospf_area_id: '1'}
+  - {address: 192.168.1.205, description: virtual interface for vlan vlan 40, interface_id: vlan
+      40, netmask: 255.255.255.240, ospf_area_id: '1'}
