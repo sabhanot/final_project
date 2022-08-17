@@ -1,6 +1,4 @@
 import xlsxwriter
-import pandas as pd
-import pandas as pd
 import json
 
 workbook = xlsxwriter.Workbook("site-1.xlsx")
