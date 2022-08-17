@@ -90,8 +90,9 @@ def get_interfaces_info(ssh_conn,site):
         int_list.append(i.split()[0])
     # print(int_list)
     for i in int_list:
-        #send_commands = [f"interface {i}","no sh"]
-        #ssh_conn.send_config_set(send_commands)
+        # cmd_1 = f"interface {i}"
+        # send_commands = [f"interface {i}","no sh"]
+        # ssh_conn.send_config_set(send_commands)
         cdp_neighbor,remote_interface_id,local_interface_id = get_cdp_neighbor(ssh_conn,i)
         hostname = get_hostname(ssh_conn)
         # print(cdp_neighbor)
@@ -155,15 +156,16 @@ def get_svi(site):
 
 
 
-def switch_info(ssh_conn,site,access_interface):
+def switch_info(ssh_conn,site,access_interface,vlans_list):
     # print("inside switch")
     hostname = get_hostname(ssh_conn)
     interface_list = get_interfaces_info(ssh_conn,site)
     for i in interface_list:
         i["ospf_area_id"] = "1"
     svi_int_list = get_svi(site)
-    for i in svi_int_list:
-        interface_list.append(i)
+    # print(svi_int_list)
+    # for i in svi_int_list:
+    #     interface_list.append(i)
     access_int_list = []
 
     for k,val in access_interface[hostname].items():
@@ -172,12 +174,11 @@ def switch_info(ssh_conn,site,access_interface):
         temp_dict["vlan_id"] = val
         access_int_list.append(temp_dict)
 
-    result_ds = {"hostname": hostname,"interfaces":interface_list,"access_interfaces":access_int_list}
-    # print(interface_list)
+    result_ds = {"hostname": hostname,"interfaces":interface_list,"access_interfaces":access_int_list,"SVI_interfaces":svi_int_list}
     print("switch done")
     final_DS["switches"].append(result_ds)
 
-def device_info(ssh,site,access_interface):
+def device_info(ssh,site,access_interface,vlans_list):
     # all_info = {"site":site,"switches":[],"routers":[]}
 
     hostname = get_hostname(ssh_conn)
@@ -186,7 +187,7 @@ def device_info(ssh,site,access_interface):
     if which_device == "r":
         router_info(ssh_conn,site)
     elif which_device == "s":
-        switch_info(ssh,site,access_interface)
+        switch_info(ssh,site,access_interface,vlans_list)
 
 
 
@@ -219,7 +220,7 @@ if __name__ == "__main__":
     for name,ip in devices.items():
         dev_conn = {'device_type': 'cisco_ios', 'ip': ip, 'username': "cisco", 'password': "cisco", 'verbose': False, 'secret' :"cisco" }
         ssh_conn = ConnectHandler(**dev_conn)
-        my_thread = threading.Thread(target=device_info, args=(ssh_conn, site, access_interface))
+        my_thread = threading.Thread(target=device_info, args=(ssh_conn, site, access_interface,switch_vlan_list))
         my_thread.start()
         threads.append(my_thread)
         # dev_ice,info_dict = device_info(ssh_conn,site,access_interface)
@@ -232,9 +233,9 @@ if __name__ == "__main__":
     #         some_thread.join()
 
     # print(final_DS)
-    with open("outputs/all_logs_site.json","w") as f:
+    with open("/outputs/all_logs_site.json","w") as f:
         json.dump(final_DS,f,indent=4)
-    with open("outputs/all_logs_site.yml","w") as f:
+    with open("/outputs/all_logs_site.yml","w") as f:
         yaml.dump(final_DS,f)
     print('"all_logs_site.yml" yaml file created')
 
